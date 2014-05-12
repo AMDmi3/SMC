@@ -123,6 +123,16 @@ include_directories(
   ${LibXmlPP_INCLUDE_DIRS}
   )
 
+link_directories(
+  ${PNG_LIBRARY_DIRS}
+  ${SDL_LIBRARY_DIRS}
+  ${SDL_IMAGE_LIBRARY_DIRS}
+  ${SDL_MIXER_LIBRARY_DIRS}
+  ${SDL_TTF_LIBRARY_DIRS}
+  ${PCRE_LIBRARY_DIRS}
+  ${LibXmlPP_LIBRARY_DIRS}
+  )
+
 ###############################################
 # mruby
 
