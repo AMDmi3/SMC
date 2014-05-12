@@ -17,7 +17,9 @@ set(FIXED_DATA_DIR "" CACHE FILEPATH "Enforce a static directory to look up grap
 #FIXME: Actually use ENABLE_MRUBY
 
 # Verbose compilation for better code quality
-if(CMAKE_COMPILER_IS_GNUCC)
+include(CheckCCompilerFlag)
+check_c_compiler_flag("-Wall" HAVE_WALL)
+if(HAVE_WALL)
   add_definitions("-Wall")
 endif()
 
