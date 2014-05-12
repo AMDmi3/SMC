@@ -27,7 +27,7 @@ pkg_search_module(PKG_CEGUI CEGUI CEGUI-0)
 # devs who don’t care about casefolding. So we just give CMake a hint
 # here to look where CEGUI.h is on my personal system.
 find_path( CEGUI_INCLUDE_DIR CEGUI.h
-           HINTS ${PKG_CEGUI_INCLUDE_DIRS} /usr/include/cegui-0/CEGUI )
+           HINTS ${PKG_CEGUI_INCLUDE_DIRS} PATH_SUFFIXES cegui-0/CEGUI )
 
 ########################################
 # The libraries
