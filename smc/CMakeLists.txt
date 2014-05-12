@@ -142,24 +142,24 @@ if (ENABLE_MRUBY)
   set(MRUBY_ROOT_DIR ${MRUBY_TOPDIR}/mruby)
   set(MRUBY_MGEMS_DIR ${MRUBY_TOPDIR}/mgems)
 
-  ExternalProject_Add(
-    mruby
-    PREFIX "${SMC_BINARY_DIR}/mruby"
-    DOWNLOAD_COMMAND ""
-    UPDATE_COMMAND ""
-    SOURCE_DIR "${MRUBY_ROOT_DIR}"
-    BUILD_IN_SOURCE 1
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND ${RAKE_EXECUTABLE} MRUBY_CONFIG=${SMC_SOURCE_DIR}/mruby_smc_build_config.rb CROSSCOMPILE_TARGET=${TOOLCHAIN_PREFIX}
-    INSTALL_COMMAND ""
-  )
-  include_directories(${MRUBY_ROOT_DIR}/include)
-
   if(TOOLCHAIN_PREFIX)
     set(MRuby_LIBRARIES "${MRUBY_ROOT_DIR}/build/${TOOLCHAIN_PREFIX}/lib/libmruby.a" "${MRUBY_ROOT_DIR}/build/${TOOLCHAIN_PREFIX}/lib/libmruby_core.a")
   else()
     set(MRuby_LIBRARIES "${MRUBY_ROOT_DIR}/build/host/lib/libmruby.a" "${MRUBY_ROOT_DIR}/build/host/lib/libmruby_core.a")
   endif()
+
+  ADD_CUSTOM_TARGET(mruby
+    COMMAND /usr/bin/env
+      CC=${CMAKE_C_COMPILER}
+      LD=${CMAKE_C_COMPILER}
+      CFLAGS=${CMAKE_C_FLAGS}\\ "-I${PCRE_INCLUDE_DIRS}"
+      LDFLAGS="-L${PCRE_LIBRARY_DIRS}"
+      ${RAKE_EXECUTABLE} MRUBY_CONFIG=${SMC_SOURCE_DIR}/mruby_smc_build_config.rb CROSSCOMPILE_TARGET=${TOOLCHAIN_PREFIX}
+    WORKING_DIRECTORY ${MRUBY_ROOT_DIR}
+    COMMENT "Building mruby"
+    )
+
+  include_directories(${MRUBY_ROOT_DIR}/include)
 else() # Disable it
   set(MRuby_LIBRARIES "")
 endif()
@@ -225,6 +225,10 @@ else()
     ${LibXmlPP_LIBRARIES}
     ${PNG_LIBRARIES}
     )
+endif()
+
+if (ENABLE_MRUBY)
+  add_dependencies(smc mruby)
 endif()
 
 # Installation instructions
